@@ -34,17 +34,17 @@
             height: 306px;
             display: block;
             border-radius: 10px;
-            transform: translate(-50%, -50%); /* Центрирует GIF по центру картинки *//* Позиция GIF: настройте top и left для изменения положения */
-            top: 44.55%;  /* Пример положения по вертикали */
+            /* Позиция GIF: настройте top и left для изменения положения */
+            top: 50%;  /* Пример положения по вертикали */
             left: 50%; /* Пример положения по горизонтали */
-           
+            transform: translate(-50%, -50%); /* Центрирует GIF по центру картинки */
             z-index: 1; /* GIF будет поверх фона 2 */
-        }
-        .background-img-first {
-            z-index: 2; /* Фон 1 будет сверху */
         }
         .background-img-second {
             z-index: 0; /* Фон 2 будет ниже */
+        }
+        .background-img-first {
+            z-index: 2; /* Фон 1 будет сверху */
         }
     </style>
 </head>
@@ -56,11 +56,13 @@
     <!-- Один контейнер для картинки и GIF -->
     <div class="image-container">
         <!-- Картинка на фоне 2 (фон для GIF) -->
-        <img src="promo1.png" class="background-img background-img-second" alt="Фон 1">
+        <img src="promo2.png" class="background-img background-img-second" alt="Фон 2">
         <!-- Картинка на фоне 1 (поверх фона 2) -->
-        <img src="promo2.png" class="background-img background-img-first" alt="Фон 2">
-        <!-- GIF, который будет поверх второго фона -->
-        <img src="ring.gif" class="gif-overlay" alt="GIF 1">
+        <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
+        <!-- GIF, который будет располагаться только относительно promo2.png -->
+        <div class="gif-container" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+            <img src="ring.gif" class="gif-overlay" alt="GIF 1">
+        </div>
     </div>
 </div>
 

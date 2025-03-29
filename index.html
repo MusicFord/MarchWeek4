@@ -23,28 +23,30 @@
             width: 75%; /* Увеличиваем контейнер в 3 раза */
             cursor: default;
         }
+        /* Контейнер для promo2 и GIF */
+        .promo2-container {
+            position: relative; /* Делаем этот контейнер опорной точкой для GIF */
+            width: 100%;
+        }
         .background-img {
             width: 100%;
             display: block;
             border-radius: 10px;
         }
         .gif-overlay {
-            position: absolute; /* Позиционируем GIF относительно родителя */
+            position: absolute; /* Теперь GIF позиционируется только относительно promo2 */
             width: 544px;
             height: 306px;
             display: block;
             border-radius: 10px;
-            /* Позиция GIF: настройте top и left для изменения положения */
-            top: 50%;  /* Пример положения по вертикали */
-            left: 50%; /* Пример положения по горизонтали */
-            transform: translate(-50%, -50%); /* Центрирует GIF по центру картинки */
-            z-index: 1; /* GIF будет поверх фона 2 */
-        }
-        .background-img-second {
-            z-index: 0; /* Фон 2 будет ниже */
+            
+            /* Теперь GIF регулируется только по promo2 */
+            top: 20%; /* Меняйте эти значения, чтобы задать точное положение */
+            left: 30%;
         }
         .background-img-first {
-            z-index: 2; /* Фон 1 будет сверху */
+            position: relative;
+            z-index: 2; /* promo1 сверху */
         }
     </style>
 </head>
@@ -53,16 +55,15 @@
 <h2>made_by_MusicFord</h2>
 
 <div class="gallery" id="gallery">
-    <!-- Один контейнер для картинки и GIF -->
     <div class="image-container">
-        <!-- Картинка на фоне 2 (фон для GIF) -->
-        <img src="promo2.png" class="background-img background-img-second" alt="Фон 2">
-        <!-- Картинка на фоне 1 (поверх фона 2) -->
-        <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
-        <!-- GIF, который будет располагаться только относительно promo2.png -->
-        <div class="gif-container" style="position: absolute; width: 100%; height: 100%; top: 0; left: 0;">
+        <!-- Контейнер, где фон 2 и GIF -->
+        <div class="promo2-container">
+            <img src="promo2.png" class="background-img" alt="Фон 2">
             <img src="ring.gif" class="gif-overlay" alt="GIF 1">
         </div>
+        
+        <!-- promo1 будет сверху, но GIF не будет привязан к нему -->
+        <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
     </div>
 </div>
 

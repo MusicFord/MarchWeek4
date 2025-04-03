@@ -87,7 +87,7 @@
         document.getElementById("blackout").style.display = "none";
     }
 
-    // Черный экран при изменении размеров окна (моментально)
+    // При изменении размера окна (для скриншотов)
     let lastWidth = window.innerWidth;
     let lastHeight = window.innerHeight;
     setInterval(() => {
@@ -102,14 +102,11 @@
     window.addEventListener("blur", showBlackout);
     window.addEventListener("focus", hideBlackout);
 
-    // Черный экран при попытке открыть DevTools
+    // Черный экран при нажатии любой клавиши
     document.addEventListener("keydown", event => {
-        if (event.key === "F12" ||
-            (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
-            (event.ctrlKey && event.key === "U")) {
-            showBlackout();
-            event.preventDefault();
-        }
+        showBlackout();
+        // Отключаем дальнейшие действия по клавиатуре
+        event.preventDefault();
     });
 
     // Отключаем правый клик
@@ -119,6 +116,13 @@
     document.querySelectorAll("img").forEach(img => {
         img.addEventListener("dragstart", event => event.preventDefault());
     });
+
+    // Дополнительная проверка на открытие DevTools (по размерам окна)
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+            showBlackout();
+        }
+    }, 500);
 </script>
 
 </body>

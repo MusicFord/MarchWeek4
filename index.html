@@ -34,6 +34,7 @@
       width: 100%;
       display: block;
       border-radius: 10px;
+      transition: filter 0.3s ease-in-out;
     }
     .gif-overlay {
       position: absolute;
@@ -46,20 +47,16 @@
       transform: translate(-50%, -50%) scale(1.5);
       display: block;
       border-radius: 10px;
+      transition: filter 0.3s ease-in-out;
     }
     .background-img-first {
       position: relative;
       z-index: 2;
     }
-    .blackout {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: black;
-      z-index: 9999;
-      display: none;
+    
+    /* Сильное размытие */
+    .blurred {
+      filter: blur(20px) brightness(50%);
     }
   </style>
 </head>
@@ -67,86 +64,65 @@
   <h2>made_by_MusicF</h2>
   <div class="gallery" id="gallery">
     <div class="image-container">
-      <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
+      <img src="promo1.png" class="background-img background-img-first protected" alt="Фон 1">
       <div class="promo2-container">
-        <img src="promo2.png" class="background-img" alt="Фон 2">
-        <img src="ring.gif" class="gif-overlay" alt="GIF 1">
+        <img src="promo2.png" class="background-img protected" alt="Фон 2">
+        <img src="ring.gif" class="gif-overlay protected" alt="GIF 1">
       </div>
-      <img src="promo3.png" class="background-img background-img-first" alt="Фон 3">
+      <img src="promo3.png" class="background-img background-img-first protected" alt="Фон 3">
     </div>
   </div>
-  <div class="blackout" id="blackout"></div>
+
   <script>
-    // Функции для показа/скрытия черного экрана
-    function showBlackout() {
-      document.getElementById("blackout").style.display = "block";
+    function applyBlur() {
+      document.querySelectorAll(".protected").forEach(img => {
+        img.classList.add("blurred");
+      });
     }
-    function hideBlackout() {
-      document.getElementById("blackout").style.display = "none";
+
+    function removeBlur() {
+      document.querySelectorAll(".protected").forEach(img => {
+        img.classList.remove("blurred");
+      });
     }
-    
-    // Показываем/скрываем черный экран при потере/возвращении фокуса
-    window.addEventListener("blur", showBlackout);
-    window.addEventListener("focus", hideBlackout);
-    
-    // Быстрое обнаружение изменения размеров окна (например, при скриншоте)
+
+    // Размытие при потере фокуса окна
+    window.addEventListener("blur", applyBlur);
+    window.addEventListener("focus", removeBlur);
+
+    // Размытие при изменении размеров окна (подозрение на скриншот)
     let lastWidth = window.innerWidth;
     let lastHeight = window.innerHeight;
+
     setInterval(() => {
       if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
-        showBlackout();
-        setTimeout(hideBlackout, 200); // через 200 мс скрываем экран
+        applyBlur();
       }
       lastWidth = window.innerWidth;
       lastHeight = window.innerHeight;
-    }, 50);
-    
-    // Блокировка горячих клавиш для открытия DevTools
+    }, 100);
+
+    // Размытие при нажатии любой клавиши
+    document.addEventListener("keydown", applyBlur);
+
+    // Блокировка клавиш DevTools и PrintScreen
     document.addEventListener("keydown", (e) => {
-      if (e.key === "F12" ||
-          (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+      if (["F12", "PrintScreen"].includes(e.key) || 
+          (e.ctrlKey && e.shiftKey && ["I", "J"].includes(e.key)) || 
           (e.ctrlKey && e.key === "U")) {
-        showBlackout();
+        applyBlur();
         e.preventDefault();
       }
     });
-    
-    // Альтернативный скрипт для PrintScreen: пытаемся перезаписать буфер обмена
-    document.addEventListener("keyup", (e) => {
-      if (e.key === "PrintScreen") {
-        navigator.clipboard.writeText("Защищено от скриншотов").then(() => {
-          alert("Скриншоты отключены!");
-        }).catch(err => {
-          console.error("Ошибка записи в буфер:", err);
-        });
-        showBlackout();
-      }
-    });
-    
-    // Блокировка печати (Ctrl+P)
-    document.addEventListener("keydown", (e) => {
-      if (e.ctrlKey && e.key === "p") {
-        alert("Печать и экспорт в PDF запрещены!");
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        showBlackout();
-      }
-    });
-    
+
     // Отключение правого клика
     document.addEventListener("contextmenu", (e) => e.preventDefault());
-    
+
     // Отключение перетаскивания изображений
     document.querySelectorAll("img").forEach(img => {
       img.addEventListener("dragstart", (e) => e.preventDefault());
     });
-    
-    // Дополнительное обнаружение открытия DevTools по размерам окна
-    setInterval(() => {
-      if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-        showBlackout();
-      }
-    }, 500);
+
   </script>
 </body>
 </html>

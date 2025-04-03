@@ -50,7 +50,7 @@
             z-index: 2;
         }
         .protected {
-            transition: filter 0.1s, opacity 0.1s;
+            transition: filter 0.2s ease-in-out;
         }
     </style>
 </head>
@@ -83,4 +83,40 @@
     }
 
     // Размытие при потере фокуса
-    window.addEventListener("blur", app
+    window.addEventListener("blur", applyBlur);
+    window.addEventListener("focus", removeBlur);
+
+    // Размытие при изменении размера окна (скриншот)
+    window.addEventListener("resize", () => {
+        applyBlur();
+        setTimeout(removeBlur, 500);
+    });
+
+    // Размытие при попытке открыть DevTools
+    document.addEventListener("keydown", event => {
+        if (event.key === "F12" ||
+            (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
+            (event.ctrlKey && event.key === "U")) {
+            applyBlur();
+            event.preventDefault();
+        }
+    });
+
+    // Отключаем правый клик
+    document.addEventListener("contextmenu", event => event.preventDefault());
+
+    // Отключаем перетаскивание изображений
+    document.querySelectorAll("img").forEach(img => {
+        img.addEventListener("dragstart", event => event.preventDefault());
+    });
+
+    // Отключаем DevTools, проверяя размеры окна
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+            applyBlur();
+        }
+    }, 500);
+</script>
+
+</body>
+</html>

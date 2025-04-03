@@ -23,11 +23,10 @@
             width: 60%;
             cursor: default;
         }
-        /* Контейнер для promo2 и GIF */
         .promo2-container {
-            position: relative; /* Делаем этот контейнер опорной точкой для GIF */
+            position: relative;
             width: 100%;
-            overflow: hidden; /* Обрезаем всё, что выходит за границы */
+            overflow: hidden;
         }
         .background-img {
             width: 100%;
@@ -36,20 +35,18 @@
         }
         .gif-overlay {
             position: absolute;
-            width: 100%;  /* Теперь GIF всегда равен ширине promo2 */
-            height: 100%; /* Теперь GIF подстраивается по высоте */
-            object-fit: cover; /* Масштабируется без искажений */
-            display: block;
-            border-radius: 10px;
+            width: 100%;
+            height: auto;
+            max-height: 100%;
             top: 0;
             left: 0;
+            display: block;
+            border-radius: 10px;
         }
         .background-img-first {
             position: relative;
-            z-index: 2; /* promo1 сверху */
+            z-index: 2;
         }
-        
-        /* Размытие при скриншоте */
         .protected {
             transition: filter 0.5s;
         }
@@ -61,7 +58,6 @@
 
 <div class="gallery" id="gallery">
     <div class="image-container">
-        <!-- Контейнер, где фон 2 и GIF -->
         <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
         <div class="promo2-container">
             <img src="promo2.png" class="background-img protected" alt="Фон 2">
@@ -72,20 +68,16 @@
 </div>
 
 <script>
-    // Функция размывает изображение при изменении экрана (скриншот вызывает resize)
     function blurOnScreenshot() {
         document.querySelectorAll(".protected").forEach(img => {
-            img.style.filter = "blur(8px)"; // Устанавливаем размытие
+            img.style.filter = "blur(8px)";
         });
-
         setTimeout(() => {
             document.querySelectorAll(".protected").forEach(img => {
-                img.style.filter = "none"; // Убираем размытие через 1 секунду
+                img.style.filter = "none";
             });
         }, 1000);
     }
-
-    // Следим за изменением экрана (скриншот вызывает resize)
     window.addEventListener("resize", blurOnScreenshot);
 </script>
 

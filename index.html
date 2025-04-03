@@ -1,129 +1,134 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>byMusicF</title>
-
-    <style>
-        body {
-            text-align: center;
-            background: #222;
-            color: white;
-            font-family: Arial, sans-serif;
-        }
-        .gallery {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .image-container {
-            position: relative;
-            width: 60%;
-            cursor: default;
-        }
-        .promo2-container {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-        }
-        .background-img {
-            width: 100%;
-            display: block;
-            border-radius: 10px;
-        }
-        .gif-overlay {
-            position: absolute;
-            width: auto;
-            height: auto;
-            max-width: 150%;
-            max-height: 150%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(1.5);
-            display: block;
-            border-radius: 10px;
-        }
-        .background-img-first {
-            position: relative;
-            z-index: 2;
-        }
-        .blackout {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: black;
-            z-index: 9999;
-            display: none;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>byMusicF</title>
+  <style>
+    body {
+      text-align: center;
+      background: #222;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    .gallery {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .image-container {
+      position: relative;
+      width: 60%;
+      cursor: default;
+    }
+    .promo2-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+    }
+    .background-img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+    }
+    .gif-overlay {
+      position: absolute;
+      width: auto;
+      height: auto;
+      max-width: 150%;
+      max-height: 150%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.5);
+      display: block;
+      border-radius: 10px;
+    }
+    .background-img-first {
+      position: relative;
+      z-index: 2;
+    }
+    .blackout {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      z-index: 9999;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-
-<h2>made_by_MusicFord</h2>
-
-<div class="gallery" id="gallery">
+  <h2>made_by_MusicFord</h2>
+  <div class="gallery" id="gallery">
     <div class="image-container">
-        <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
-        <div class="promo2-container">
-            <img src="promo2.png" class="background-img" alt="Фон 2">
-            <img src="ring.gif" class="gif-overlay" alt="GIF 1">
-        </div>
-        <img src="promo3.png" class="background-img background-img-first" alt="Фон 3">
+      <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
+      <div class="promo2-container">
+        <img src="promo2.png" class="background-img" alt="Фон 2">
+        <img src="ring.gif" class="gif-overlay" alt="GIF 1">
+      </div>
+      <img src="promo3.png" class="background-img background-img-first" alt="Фон 3">
     </div>
-</div>
-
-<div class="blackout" id="blackout"></div>
-
-<script>
+  </div>
+  <div class="blackout" id="blackout"></div>
+  <script>
     function showBlackout() {
-        document.getElementById("blackout").style.display = "block";
+      document.getElementById("blackout").style.display = "block";
     }
     
     function hideBlackout() {
-        document.getElementById("blackout").style.display = "none";
+      document.getElementById("blackout").style.display = "none";
     }
-
-    // При изменении размера окна (для скриншотов)
+    
+    // Скрываем экран при изменении размеров окна
     let lastWidth = window.innerWidth;
     let lastHeight = window.innerHeight;
     setInterval(() => {
-        if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
-            showBlackout();
-        }
-        lastWidth = window.innerWidth;
-        lastHeight = window.innerHeight;
+      if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
+        showBlackout();
+      }
+      lastWidth = window.innerWidth;
+      lastHeight = window.innerHeight;
     }, 50);
-
-    // Черный экран при потере фокуса
+    
+    // Скрываем экран при потере фокуса и восстанавливаем при фокусе
     window.addEventListener("blur", showBlackout);
     window.addEventListener("focus", hideBlackout);
-
-    // Черный экран при нажатии любой клавиши
+    
+    // Отключаем DevTools (F12, Ctrl+Shift+I/J, Ctrl+U)
     document.addEventListener("keydown", event => {
+      if (event.key === "F12" ||
+          (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
+          (event.ctrlKey && event.key === "U")) {
         showBlackout();
-        // Отключаем дальнейшие действия по клавиатуре
         event.preventDefault();
+      }
     });
-
+    
+    // Блокировка PrintScreen (на событие keyup)
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'PrintScreen') {
+        // Пытаемся очистить буфер обмена (работает не во всех браузерах)
+        navigator.clipboard.writeText('').catch(() => {});
+        alert('Screenshots disabled!');
+        showBlackout();
+      }
+    });
+    
+    // Блокировка Ctrl+P (печати)
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'p') {
+        alert('This section is not allowed to print or export to PDF');
+        e.cancelBubble = true;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        showBlackout();
+      }
+    });
+    
     // Отключаем правый клик
     document.addEventListener("contextmenu", event => event.preventDefault());
-
+    
     // Отключаем перетаскивание изображений
-    document.querySelectorAll("img").forEach(img => {
-        img.addEventListener("dragstart", event => event.preventDefault());
-    });
-
-    // Дополнительная проверка на открытие DevTools (по размерам окна)
-    setInterval(() => {
-        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-            showBlackout();
-        }
-    }, 500);
-</script>
-
-</body>
-</html>

@@ -50,7 +50,7 @@
             z-index: 2;
         }
         .protected {
-            transition: filter 0.5s, opacity 0.5s;
+            transition: filter 0.1s, opacity 0.1s;
         }
     </style>
 </head>
@@ -70,54 +70,17 @@
 </div>
 
 <script>
-    function blurOnScreenshot() {
+    function applyBlur() {
         document.querySelectorAll(".protected").forEach(img => {
-            img.style.filter = "blur(8px)";
+            img.style.filter = "blur(12px)";
         });
-        setTimeout(() => {
-            document.querySelectorAll(".protected").forEach(img => {
-                img.style.filter = "none";
-            });
-        }, 1000);
     }
-    window.addEventListener("resize", blurOnScreenshot);
 
-    window.addEventListener("blur", () => {
-        document.querySelectorAll(".protected").forEach(img => {
-            img.style.filter = "blur(8px)";
-        });
-    });
-
-    window.addEventListener("focus", () => {
+    function removeBlur() {
         document.querySelectorAll(".protected").forEach(img => {
             img.style.filter = "none";
         });
-    });
+    }
 
-    // Отключаем правый клик
-    document.addEventListener("contextmenu", event => event.preventDefault());
-
-    // Отключаем перетаскивание изображений
-    document.querySelectorAll("img").forEach(img => {
-        img.addEventListener("dragstart", event => event.preventDefault());
-    });
-
-    // Отключаем F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-    document.addEventListener("keydown", event => {
-        if (event.key === "F12" ||
-            (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
-            (event.ctrlKey && event.key === "U")) {
-            event.preventDefault();
-        }
-    });
-
-    // Отключаем DevTools, проверяя открытие консоли
-    setInterval(() => {
-        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-            document.body.innerHTML = "Доступ запрещен";
-        }
-    }, 1000);
-</script>
-
-</body>
-</html>
+    // Размытие при потере фокуса
+    window.addEventListener("blur", app

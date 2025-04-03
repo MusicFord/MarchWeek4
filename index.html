@@ -27,6 +27,7 @@
         .promo2-container {
             position: relative; /* Делаем этот контейнер опорной точкой для GIF */
             width: 100%;
+            overflow: hidden; /* Обрезаем всё, что выходит за границы */
         }
         .background-img {
             width: 100%;
@@ -36,12 +37,11 @@
         .gif-overlay {
             position: absolute;
             width: 100%;  /* Теперь GIF всегда равен ширине promo2 */
-            height: auto;  /* Сохраняем пропорции */
+            height: 100%; /* Теперь GIF подстраивается по высоте */
+            object-fit: cover; /* Масштабируется без искажений */
             display: block;
             border-radius: 10px;
-            
-            /* Позиционируем GIF только относительно promo2 */
-            top: 5%; /* Настраивайте вручную */
+            top: 0;
             left: 0;
         }
         .background-img-first {

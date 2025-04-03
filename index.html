@@ -6,6 +6,8 @@
   <title>byMusicF</title>
   <style>
     body {
+      margin: 0;
+      padding: 0;
       text-align: center;
       background: #222;
       color: white;
@@ -16,6 +18,7 @@
       justify-content: center;
       flex-wrap: wrap;
       gap: 10px;
+      margin: 20px;
     }
     .image-container {
       position: relative;
@@ -74,30 +77,31 @@
   </div>
   <div class="blackout" id="blackout"></div>
   <script>
+    // Функции для показа/скрытия черного экрана
     function showBlackout() {
       document.getElementById("blackout").style.display = "block";
     }
-    
     function hideBlackout() {
       document.getElementById("blackout").style.display = "none";
     }
-    
-    // Скрываем экран при изменении размеров окна
+
+    // Отслеживание изменения размеров окна (например, при попытке скриншота)
     let lastWidth = window.innerWidth;
     let lastHeight = window.innerHeight;
     setInterval(() => {
       if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
         showBlackout();
+        setTimeout(hideBlackout, 200); // скрываем через 200мс
       }
       lastWidth = window.innerWidth;
       lastHeight = window.innerHeight;
     }, 50);
-    
-    // Скрываем экран при потере фокуса и восстанавливаем при фокусе
+
+    // Показываем черный экран при потере фокуса и скрываем при фокусе
     window.addEventListener("blur", showBlackout);
     window.addEventListener("focus", hideBlackout);
-    
-    // Отключаем DevTools (F12, Ctrl+Shift+I/J, Ctrl+U)
+
+    // Блокировка попыток открыть DevTools (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
     document.addEventListener("keydown", event => {
       if (event.key === "F12" ||
           (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
@@ -106,18 +110,18 @@
         event.preventDefault();
       }
     });
-    
-    // Блокировка PrintScreen (на событие keyup)
+
+    // ------------------ ВАШ СКРИПТ ------------------ 
+    // Блокировка PrintScreen
     document.addEventListener('keyup', (e) => {
       if (e.key === 'PrintScreen') {
-        // Пытаемся очистить буфер обмена (работает не во всех браузерах)
-        navigator.clipboard.writeText('').catch(() => {});
+        navigator.clipboard.writeText('').catch(()=>{});
         alert('Screenshots disabled!');
         showBlackout();
       }
     });
-    
-    // Блокировка Ctrl+P (печати)
+
+    // Блокировка печати (Ctrl+P)
     document.addEventListener('keydown', (e) => {
       if (e.ctrlKey && e.key === 'p') {
         alert('This section is not allowed to print or export to PDF');
@@ -127,8 +131,15 @@
         showBlackout();
       }
     });
-    
+    // ------------------ КОНЕЦ ВАШЕГО СКРИПТА ------------------
+
     // Отключаем правый клик
     document.addEventListener("contextmenu", event => event.preventDefault());
-    
+
     // Отключаем перетаскивание изображений
+    document.querySelectorAll("img").forEach(img => {
+      img.addEventListener("dragstart", event => event.preventDefault());
+    });
+  </script>
+</body>
+</html>

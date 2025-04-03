@@ -60,12 +60,12 @@
 
 <div class="gallery" id="gallery">
     <div class="image-container">
-        <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
+        <img src="promo1.png" class="background-img background-img-first protected" alt="Фон 1">
         <div class="promo2-container">
             <img src="promo2.png" class="background-img protected" alt="Фон 2">
             <img src="ring.gif" class="gif-overlay" alt="GIF 1">
         </div>
-        <img src="promo3.png" class="background-img background-img-first" alt="Фон 3">
+        <img src="promo3.png" class="background-img background-img-first protected" alt="Фон 3">
     </div>
 </div>
 
@@ -84,13 +84,13 @@
 
     window.addEventListener("blur", () => {
         document.querySelectorAll(".protected").forEach(img => {
-            img.style.opacity = "0";
+            img.style.filter = "blur(8px)";
         });
     });
 
     window.addEventListener("focus", () => {
         document.querySelectorAll(".protected").forEach(img => {
-            img.style.opacity = "1";
+            img.style.filter = "none";
         });
     });
 
@@ -110,6 +110,13 @@
             event.preventDefault();
         }
     });
+
+    // Отключаем DevTools, проверяя открытие консоли
+    setInterval(() => {
+        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+            document.body.innerHTML = "Доступ запрещен";
+        }
+    }, 1000);
 </script>
 
 </body>

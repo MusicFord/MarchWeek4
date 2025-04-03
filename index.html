@@ -50,7 +50,17 @@
             z-index: 2;
         }
         .protected {
-            transition: filter 0.2s ease-in-out;
+            transition: opacity 0.2s ease-in-out;
+        }
+        .blackout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 9999;
+            display: none;
         }
     </style>
 </head>
@@ -69,54 +79,28 @@
     </div>
 </div>
 
+<div class="blackout" id="blackout"></div>
+
 <script>
-    function applyBlur() {
-        document.querySelectorAll(".protected").forEach(img => {
-            img.style.filter = "blur(12px)";
-        });
+    function showBlackout() {
+        document.getElementById("blackout").style.display = "block";
+    }
+    
+    function hideBlackout() {
+        document.getElementById("blackout").style.display = "none";
     }
 
-    function removeBlur() {
-        document.querySelectorAll(".protected").forEach(img => {
-            img.style.filter = "none";
-        });
-    }
+    // Черный экран при потере фокуса
+    window.addEventListener("blur", showBlackout);
+    window.addEventListener("focus", hideBlackout);
 
-    // Размытие при потере фокуса
-    window.addEventListener("blur", applyBlur);
-    window.addEventListener("focus", removeBlur);
-
-    // Размытие при изменении размера окна (скриншот)
+    // Черный экран при изменении размера окна (скриншот)
     window.addEventListener("resize", () => {
-        applyBlur();
-        setTimeout(removeBlur, 500);
+        showBlackout();
+        setTimeout(hideBlackout, 500);
     });
 
-    // Размытие при попытке открыть DevTools
+    // Черный экран при попытке открыть DevTools
     document.addEventListener("keydown", event => {
         if (event.key === "F12" ||
             (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
-            (event.ctrlKey && event.key === "U")) {
-            applyBlur();
-            event.preventDefault();
-        }
-    });
-
-    // Отключаем правый клик
-    document.addEventListener("contextmenu", event => event.preventDefault());
-
-    // Отключаем перетаскивание изображений
-    document.querySelectorAll("img").forEach(img => {
-        img.addEventListener("dragstart", event => event.preventDefault());
-    });
-
-    // Отключаем DevTools, проверяя размеры окна
-    setInterval(() => {
-        if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
-            applyBlur();
-        }
-    }, 500);
-</script>
-
-</body>
-</html>

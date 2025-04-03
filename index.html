@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -51,7 +50,7 @@
             z-index: 2;
         }
         .protected {
-            transition: filter 0.5s;
+            transition: filter 0.5s, opacity 0.5s;
         }
     </style>
 </head>
@@ -82,6 +81,18 @@
         }, 1000);
     }
     window.addEventListener("resize", blurOnScreenshot);
+
+    window.addEventListener("blur", () => {
+        document.querySelectorAll(".protected").forEach(img => {
+            img.style.opacity = "0";  // Делаем изображение невидимым
+        });
+    });
+
+    window.addEventListener("focus", () => {
+        document.querySelectorAll(".protected").forEach(img => {
+            img.style.opacity = "1";  // Возвращаем видимость
+        });
+    });
 </script>
 
 </body>

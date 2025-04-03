@@ -20,7 +20,7 @@
         }
         .image-container {
             position: relative;
-            width: 60%; /* Увеличиваем контейнер в 3 раза */
+            width: 60%;
             cursor: default;
         }
         /* Контейнер для promo2 и GIF */
@@ -34,21 +34,24 @@
             border-radius: 10px;
         }
         .gif-overlay {
-            position: absolute; /* Теперь GIF позиционируется только относительно promo2 */
-            width: 1000px;
-            height: 612px;
+            position: absolute;
+            width: 100%;  /* Теперь GIF всегда равен ширине promo2 */
+            height: auto;  /* Сохраняем пропорции */
             display: block;
             border-radius: 10px;
             
-            /* Теперь GIF регулируется только по promo2 */
-            top: 5%; /* Меняйте эти значения, чтобы задать точное положение */
-            left: 50%;
-            transform: translateX(-50%);
-           /* transform: translate(-50%, -50%); /* Центрирует GIF по центру картинки */
+            /* Позиционируем GIF только относительно promo2 */
+            top: 5%; /* Настраивайте вручную */
+            left: 0;
         }
         .background-img-first {
             position: relative;
             z-index: 2; /* promo1 сверху */
+        }
+        
+        /* Размытие при скриншоте */
+        .protected {
+            transition: filter 0.5s;
         }
     </style>
 </head>
@@ -61,16 +64,30 @@
         <!-- Контейнер, где фон 2 и GIF -->
         <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
         <div class="promo2-container">
-            <img src="promo2.png" class="background-img" alt="Фон 2">
+            <img src="promo2.png" class="background-img protected" alt="Фон 2">
             <img src="ring.gif" class="gif-overlay" alt="GIF 1">
         </div>
-         <img src="promo3.png" class="background-img background-img-first" alt="Фон 3">
-        
-        
-        <!-- promo1 будет сверху, но GIF не будет привязан к нему -->
-       
+        <img src="promo3.png" class="background-img background-img-first" alt="Фон 3">
     </div>
 </div>
+
+<script>
+    // Функция размывает изображение при изменении экрана (скриншот вызывает resize)
+    function blurOnScreenshot() {
+        document.querySelectorAll(".protected").forEach(img => {
+            img.style.filter = "blur(8px)"; // Устанавливаем размытие
+        });
+
+        setTimeout(() => {
+            document.querySelectorAll(".protected").forEach(img => {
+                img.style.filter = "none"; // Убираем размытие через 1 секунду
+            });
+        }, 1000);
+    }
+
+    // Следим за изменением экрана (скриншот вызывает resize)
+    window.addEventListener("resize", blurOnScreenshot);
+</script>
 
 </body>
 </html>

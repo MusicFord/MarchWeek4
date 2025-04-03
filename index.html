@@ -84,11 +84,69 @@
     function hideBlackout() {
       document.getElementById("blackout").style.display = "none";
     }
-
-    // Пример реакции на изменение размеров окна
+    
+    // Показываем/скрываем черный экран при потере/возвращении фокуса
+    window.addEventListener("blur", showBlackout);
+    window.addEventListener("focus", hideBlackout);
+    
+    // Быстрое обнаружение изменения размеров окна (например, при скриншоте)
     let lastWidth = window.innerWidth;
     let lastHeight = window.innerHeight;
     setInterval(() => {
       if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
         showBlackout();
-        setTimeout(hideBlackout, 200);
+        setTimeout(hideBlackout, 200); // через 200 мс скрываем экран
+      }
+      lastWidth = window.innerWidth;
+      lastHeight = window.innerHeight;
+    }, 50);
+    
+    // Блокировка горячих клавиш для открытия DevTools
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "F12" ||
+          (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) ||
+          (e.ctrlKey && e.key === "U")) {
+        showBlackout();
+        e.preventDefault();
+      }
+    });
+    
+    // Альтернативный скрипт для PrintScreen: пытаемся перезаписать буфер обмена
+    document.addEventListener("keyup", (e) => {
+      if (e.key === "PrintScreen") {
+        navigator.clipboard.writeText("Защищено от скриншотов").then(() => {
+          alert("Скриншоты отключены!");
+        }).catch(err => {
+          console.error("Ошибка записи в буфер:", err);
+        });
+        showBlackout();
+      }
+    });
+    
+    // Блокировка печати (Ctrl+P)
+    document.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.key === "p") {
+        alert("Печать и экспорт в PDF запрещены!");
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        showBlackout();
+      }
+    });
+    
+    // Отключение правого клика
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+    
+    // Отключение перетаскивания изображений
+    document.querySelectorAll("img").forEach(img => {
+      img.addEventListener("dragstart", (e) => e.preventDefault());
+    });
+    
+    // Дополнительное обнаружение открытия DevTools по размерам окна
+    setInterval(() => {
+      if (window.outerHeight - window.innerHeight > 200 || window.outerWidth - window.innerWidth > 200) {
+        showBlackout();
+      }
+    }, 500);
+  </script>
+</body>
+</html>

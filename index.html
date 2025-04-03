@@ -49,15 +49,12 @@
             position: relative;
             z-index: 2;
         }
-        .protected {
-            transition: opacity 0.2s ease-in-out;
-        }
         .blackout {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100vh;
             background: black;
             z-index: 9999;
             display: none;
@@ -70,12 +67,12 @@
 
 <div class="gallery" id="gallery">
     <div class="image-container">
-        <img src="promo1.png" class="background-img background-img-first protected" alt="Фон 1">
+        <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
         <div class="promo2-container">
-            <img src="promo2.png" class="background-img protected" alt="Фон 2">
+            <img src="promo2.png" class="background-img" alt="Фон 2">
             <img src="ring.gif" class="gif-overlay" alt="GIF 1">
         </div>
-        <img src="promo3.png" class="background-img background-img-first protected" alt="Фон 3">
+        <img src="promo3.png" class="background-img background-img-first" alt="Фон 3">
     </div>
 </div>
 
@@ -90,17 +87,39 @@
         document.getElementById("blackout").style.display = "none";
     }
 
+    // Черный экран при изменении размеров окна (моментально)
+    let lastWidth = window.innerWidth;
+    let lastHeight = window.innerHeight;
+    setInterval(() => {
+        if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
+            showBlackout();
+        }
+        lastWidth = window.innerWidth;
+        lastHeight = window.innerHeight;
+    }, 50);
+
     // Черный экран при потере фокуса
     window.addEventListener("blur", showBlackout);
     window.addEventListener("focus", hideBlackout);
-
-    // Черный экран при изменении размера окна (скриншот)
-    window.addEventListener("resize", () => {
-        showBlackout();
-        setTimeout(hideBlackout, 500);
-    });
 
     // Черный экран при попытке открыть DevTools
     document.addEventListener("keydown", event => {
         if (event.key === "F12" ||
             (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
+            (event.ctrlKey && event.key === "U")) {
+            showBlackout();
+            event.preventDefault();
+        }
+    });
+
+    // Отключаем правый клик
+    document.addEventListener("contextmenu", event => event.preventDefault());
+
+    // Отключаем перетаскивание изображений
+    document.querySelectorAll("img").forEach(img => {
+        img.addEventListener("dragstart", event => event.preventDefault());
+    });
+</script>
+
+</body>
+</html>

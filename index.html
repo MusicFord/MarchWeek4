@@ -64,7 +64,7 @@
   </style>
 </head>
 <body>
-  <h2>made_by_MusicFord</h2>
+  <h2>made_by_MusicF</h2>
   <div class="gallery" id="gallery">
     <div class="image-container">
       <img src="promo1.png" class="background-img background-img-first" alt="Фон 1">
@@ -85,61 +85,10 @@
       document.getElementById("blackout").style.display = "none";
     }
 
-    // Отслеживание изменения размеров окна (например, при попытке скриншота)
+    // Пример реакции на изменение размеров окна
     let lastWidth = window.innerWidth;
     let lastHeight = window.innerHeight;
     setInterval(() => {
       if (window.innerWidth !== lastWidth || window.innerHeight !== lastHeight) {
         showBlackout();
-        setTimeout(hideBlackout, 200); // скрываем через 200мс
-      }
-      lastWidth = window.innerWidth;
-      lastHeight = window.innerHeight;
-    }, 50);
-
-    // Показываем черный экран при потере фокуса и скрываем при фокусе
-    window.addEventListener("blur", showBlackout);
-    window.addEventListener("focus", hideBlackout);
-
-    // Блокировка попыток открыть DevTools (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
-    document.addEventListener("keydown", event => {
-      if (event.key === "F12" ||
-          (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J")) ||
-          (event.ctrlKey && event.key === "U")) {
-        showBlackout();
-        event.preventDefault();
-      }
-    });
-
-    // ------------------ ВАШ СКРИПТ ------------------ 
-    // Блокировка PrintScreen
-    document.addEventListener('keyup', (e) => {
-      if (e.key === 'PrintScreen') {
-        navigator.clipboard.writeText('').catch(()=>{});
-        alert('Screenshots disabled!');
-        showBlackout();
-      }
-    });
-
-    // Блокировка печати (Ctrl+P)
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'p') {
-        alert('This section is not allowed to print or export to PDF');
-        e.cancelBubble = true;
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        showBlackout();
-      }
-    });
-    // ------------------ КОНЕЦ ВАШЕГО СКРИПТА ------------------
-
-    // Отключаем правый клик
-    document.addEventListener("contextmenu", event => event.preventDefault());
-
-    // Отключаем перетаскивание изображений
-    document.querySelectorAll("img").forEach(img => {
-      img.addEventListener("dragstart", event => event.preventDefault());
-    });
-  </script>
-</body>
-</html>
+        setTimeout(hideBlackout, 200);

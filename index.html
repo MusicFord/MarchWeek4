@@ -84,16 +84,8 @@
 
     window.addEventListener("blur", () => {
         document.querySelectorAll(".protected").forEach(img => {
-            img.style.opacity = "0";  // Делаем изображение невидимым
+            img.style.opacity = "0";
         });
     });
 
     window.addEventListener("focus", () => {
-        document.querySelectorAll(".protected").forEach(img => {
-            img.style.opacity = "1";  // Возвращаем видимость
-        });
-    });
-</script>
-
-</body>
-</html>
